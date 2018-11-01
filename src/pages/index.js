@@ -1,16 +1,23 @@
 import React from 'react'
 import Layout from '../components/layout'
 import queryString from 'query-string'
+import { Tags } from 'opentracing'
 
 const Entity = {
   CLIENT: 'CLIENT',
-  SERVICE_PROVIDER: 'SERVICE_PROVIDER',
+  SERVICE_PROVIDER: 'SERVICEPROVIDER',
+}
+
+const Color = {
+  HOT_PINK: '#e91e63',
+  LIGHT_PINK: '#f7d2e0',
+  WHITE: '#ffffff',
 }
 
 const Header = props => (
   <div
     style={{
-      background: '#e91e63',
+      background: Color.HOT_PINK,
       marginBottom: '1.45rem',
     }}
   >
@@ -36,11 +43,27 @@ const Body = props => (
   </div>
 )
 
+const Tag = props => (
+  <div
+    style={{
+      padding: '0.1em 0.5em',
+      background: Color.HOT_PINK,
+      color: Color.WHITE,
+      borderRadius: 3,
+      display: 'inline-block',
+      width: 'auto',
+      marginRight: '0.25em',
+    }}
+  >
+    {props.children}
+  </div>
+)
+
 const InvalidFormat = props => {
   return (
     <Layout>
       <Header>
-        <h1 style={{ margin: 0, color: '#ffffff' }}>
+        <h1 style={{ margin: 0, color: Color.WHITE }}>
           Invalid URL query format
         </h1>
       </Header>
@@ -68,24 +91,36 @@ const IndexPage = props => {
       </InvalidFormat>
     )
   }
+  entity.tags = ['dog', 'cat']
 
   return (
     <Layout>
       <Header>
-        <h1 style={{ margin: 0, color: '#ffffff' }}>{entity.name}</h1>
+        <h1 style={{ margin: 0, color: Color.WHITE }}>{entity.name}</h1>
         <code
           style={{
             paddingLeft: '0.5em',
             paddingRight: '0.5em',
-            background: '#f7d2e0',
-            color: '#e91e63',
+            background: Color.LIGHT_PINK,
+            color: Color.HOT_PINK,
           }}
         >
           {entity.type.toLowerCase()}#{entity.id}
         </code>
       </Header>
       <Body>
-        <label>Residential address</label>
+        {entity.tags && (
+          <div style={{ marginBottom: '1em' }}>
+            {entity.tags.map(tag => (
+              <Tag>{tag}</Tag>
+            ))}
+          </div>
+        )}
+        <label>
+          {entity.type === Entity.CLIENT
+            ? 'Residential address'
+            : 'Office address'}
+        </label>
         <address>{`123 Fake Rd \n#12-34\nSingapore 123123`}</address>
 
         <label>Phone number</label>
@@ -99,7 +134,6 @@ const IndexPage = props => {
 
         <p>Welcome to your new Gatsby site.</p>
         <p>Now go build something great.</p>
-        <div style={{ maxWidth: '300px', marginBottom: '1.45rem' }} />
       </Body>
     </Layout>
   )
