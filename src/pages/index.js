@@ -4,8 +4,8 @@ import queryString from 'query-string'
 import { Tags } from 'opentracing'
 
 const Entity = {
-  CLIENT: 'CLIENT',
-  SERVICE_PROVIDER: 'SERVICEPROVIDER',
+  CLIENT: 'client',
+  SERVICE_PROVIDER: 'serviceprovider',
 }
 
 const Color = {
@@ -121,19 +121,26 @@ const IndexPage = props => {
             ? 'Residential address'
             : 'Office address'}
         </label>
-        <address>{`123 Fake Rd \n#12-34\nSingapore 123123`}</address>
+        <p>{entity.address || '-'}</p>
 
         <label>Phone number</label>
-        <p>+65 91234567</p>
+        <p>{entity.phone || '-'}</p>
+
+        <label>Email address</label>
+        <p>{entity.email || '-'}</p>
 
         <label>
           {entity.type === Entity.CLIENT
             ? 'Services requested'
             : 'Services offered'}
         </label>
-
-        <p>Welcome to your new Gatsby site.</p>
-        <p>Now go build something great.</p>
+        <ul>
+          {entity.services.map(service => (
+            <li>
+              {service.type} - ${service.cost}
+            </li>
+          ))}
+        </ul>
       </Body>
     </Layout>
   )
