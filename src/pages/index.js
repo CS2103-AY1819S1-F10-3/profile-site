@@ -77,12 +77,33 @@ const IndexPage = props => {
   let splits
   try {
     entity = queryString.parse(props.location.search)
+
+    // Parse services
     entity.services = entity.services.split(',').map(unprocessedService => {
       splits = unprocessedService.split(':')
       return {
         type: splits[0],
         cost: splits[1],
       }
+    })
+
+    // Split tags by comma
+    entity.tags = entity.tags.split(',')
+
+    // Remove parenthesis around tags
+    entity.tags = entity.tags.map((dirtyEntity, index) => {
+      let cleanEntity = dirtyEntity
+
+      if (index === 0) {
+        cleanEntity = cleanEntity.slice(1)
+      }
+
+      if (index === entity.tags.length - 1) {
+        cleanEntity = cleanEntity.slice(0, entity.service.length - 1)
+      }
+
+      cleanEntity = cleanEntity.slice(1)
+      cleanEntity = cleanEntity.slice(0, entity.service.length - 1)
     })
   } catch (error) {
     return (
@@ -91,7 +112,6 @@ const IndexPage = props => {
       </InvalidFormat>
     )
   }
-  entity.tags = ['dog', 'cat']
 
   return (
     <Layout>
