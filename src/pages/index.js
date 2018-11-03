@@ -1,7 +1,6 @@
 import React from 'react'
 import Layout from '../components/layout'
 import queryString from 'query-string'
-import { Tags } from 'opentracing'
 
 const Entity = {
   CLIENT: 'client',
@@ -77,6 +76,8 @@ const IndexPage = props => {
   let splits
   try {
     entity = queryString.parse(props.location.search)
+    console.log(props.location.search)
+    console.log({ entity })
 
     // Parse services
     entity.services = entity.services.split(',').map(unprocessedService => {
@@ -88,22 +89,24 @@ const IndexPage = props => {
     })
 
     // Split tags by comma
-    entity.tags = entity.tags.split(',')
+    entity.tags = entity.tags.split(', ')
 
     // Remove parenthesis around tags
-    entity.tags = entity.tags.map((dirtyEntity, index) => {
-      let cleanEntity = dirtyEntity
+    entity.tags = entity.tags.map((dirtyTag, index) => {
+      let cleanTag = dirtyTag
 
       if (index === 0) {
-        cleanEntity = cleanEntity.slice(1)
+        cleanTag = cleanTag.slice(1)
       }
 
       if (index === entity.tags.length - 1) {
-        cleanEntity = cleanEntity.slice(0, entity.service.length - 1)
+        cleanTag = cleanTag.slice(0, cleanTag.length - 1)
       }
 
-      cleanEntity = cleanEntity.slice(1)
-      cleanEntity = cleanEntity.slice(0, entity.service.length - 1)
+      cleanTag = cleanTag.slice(1)
+      cleanTag = cleanTag.slice(0, cleanTag.length - 1)
+
+      return cleanTag
     })
   } catch (error) {
     return (
