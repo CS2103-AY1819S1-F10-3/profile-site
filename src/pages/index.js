@@ -5,7 +5,7 @@ import { Tags } from 'opentracing'
 
 const Entity = {
   CLIENT: 'client',
-  SERVICE_PROVIDER: 'serviceprovider',
+  VENDOR: 'vendor',
 }
 
 const Color = {
