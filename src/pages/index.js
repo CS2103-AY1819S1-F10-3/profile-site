@@ -158,11 +158,17 @@ const IndexPage = props => {
             : 'Services offered'}
         </label>
         <ul>
-          {entity.services.map(service => (
-            <li>
-              {service.type} - ${service.cost}
-            </li>
-          ))}
+          {entity.services.map(service => {
+            if (!service.type || !service.cost) {
+              return null
+            }
+
+            return (
+              <li>
+                {service.type} - ${service.cost}
+              </li>
+            )
+          })}
         </ul>
       </Body>
     </Layout>
